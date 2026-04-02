@@ -1,3 +1,4 @@
+import ImageTabs from "@/components/image-tabs";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Briefcase, CheckCircle2, TrendingUp } from "lucide-react";
 import Link from "next/link";
@@ -27,6 +28,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Hero Images Section */}
+        <ImageTabs />
 
         {/* Features Section */}
         <section className="border-t bg-white py-24">
