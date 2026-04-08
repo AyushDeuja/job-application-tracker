@@ -21,7 +21,7 @@ export async function createJobApplication(data: JobApplicationData) {
   const session = await getSession();
 
   if (!session?.user) {
-    throw new Error("Unauthorized");
+    return { error: "Unauthorized" };
   }
 
   await connectDB();
@@ -39,7 +39,7 @@ export async function createJobApplication(data: JobApplicationData) {
   } = data;
 
   if (!company || !position || !columnId || !boardId) {
-    throw new Error("Missing required fields");
+    return { error: "Missing required fields" };
   }
 
   //verify board ownership
@@ -50,7 +50,7 @@ export async function createJobApplication(data: JobApplicationData) {
   });
 
   if (!board) {
-    throw new Error("Board not found or unauthorized");
+    return { error: "Board not found" };
   }
 
   //verify column exists in board
@@ -61,7 +61,7 @@ export async function createJobApplication(data: JobApplicationData) {
   });
 
   if (!column) {
-    throw new Error("Column not found in the specified board");
+    return { error: "Column not found" };
   }
 
   const maxOrder = (await JobApplication.findOne({ columnId })
@@ -78,6 +78,7 @@ export async function createJobApplication(data: JobApplicationData) {
     notes,
     salary,
     jobUrl,
+    userId: session.user.id,
     columnId,
     boardId,
     tags: tags || [],
@@ -92,5 +93,5 @@ export async function createJobApplication(data: JobApplicationData) {
     },
   });
 
-  return { data: jobApplication };
+  return { data: JSON.parse(JSON.stringify(jobApplication)) };
 }
