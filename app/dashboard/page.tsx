@@ -2,7 +2,9 @@ import { KanbanBoard } from "@/components/kanban-board";
 import { getSession } from "@/lib/auth/auth";
 import connectDB from "@/lib/db";
 import { Board } from "@/lib/models";
+import jobApplication from "@/lib/models/job-application";
 import { redirect } from "next/navigation";
+import path from "path";
 
 const Dashboard = async () => {
   const session = await getSession();
@@ -15,6 +17,9 @@ const Dashboard = async () => {
     name: "Job Hunt",
   }).populate({
     path: "columns",
+    populate: {
+      path: "jobApplications",
+    },
   });
 
   console.log(board);
