@@ -245,5 +245,7 @@ export async function updateJobApplication(
     new: true,
   });
 
+  revalidatePath("/dashboard");
+
   return { data: JSON.parse(JSON.stringify(updated)) };
 }
