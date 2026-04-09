@@ -10,7 +10,10 @@ import {
 } from "./ui/dropdown-menu";
 import { DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
-import { updateJobApplication } from "@/lib/actions/job-applications";
+import {
+  deleteJobApplication,
+  updateJobApplication,
+} from "@/lib/actions/job-applications";
 import {
   Dialog,
   DialogContent,
@@ -58,6 +61,17 @@ export function JobApplicationCard({ job, columns }: JobApplicationCardProps) {
       }
     } catch (err) {
       console.error("Failed to update job application:", err);
+    }
+  }
+
+  async function handleDelete() {
+    try {
+      const result = await deleteJobApplication(job._id);
+      if (!result.error) {
+        alert("Job application deleted successfully");
+      }
+    } catch (err) {
+      console.error("Failed to delete job application:", err);
     }
   }
 
@@ -135,7 +149,10 @@ export function JobApplicationCard({ job, columns }: JobApplicationCardProps) {
                         ))}
                     </>
                   )}
-                  <DropdownMenuItem className="text-destructive">
+                  <DropdownMenuItem
+                    className="text-destructive"
+                    onClick={handleDelete}
+                  >
                     <Trash2 className="mr-2 h-4 w-4" />
                     Delete
                   </DropdownMenuItem>
