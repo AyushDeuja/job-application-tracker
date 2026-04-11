@@ -26,6 +26,7 @@ import {
   closestCorners,
   DndContext,
   DragEndEvent,
+  DragOverlay,
   DragStartEvent,
   PointerSensor,
   useDroppable,
@@ -292,6 +293,11 @@ export function KanbanBoard({ board, userId }: KanbanBoardProps) {
     await moveJob(activeId, targetColumnId, newOrder);
   }
 
+  const activeJob =
+    columns
+      .flatMap((col) => col.jobApplications || [])
+      .find((job) => job._id === activeId) || null;
+
   return (
     <DndContext
       sensors={sensors}
@@ -318,6 +324,13 @@ export function KanbanBoard({ board, userId }: KanbanBoardProps) {
           })}
         </div>
       </div>
+      <DragOverlay>
+        {activeJob ? (
+          <div className="opacity-50">
+            <JobApplicationCard job={activeJob} columns={columns} />
+          </div>
+        ) : null}
+      </DragOverlay>
     </DndContext>
   );
 }
